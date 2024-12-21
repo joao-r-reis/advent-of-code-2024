@@ -27,7 +27,7 @@ func main() {
 			fmt.Printf("Report %d is SAFE\n", i)
 			safe++
 		} else {
-			secondValidationSucceeded := AttemptSecondValidation(report)
+			secondValidationSucceeded := AttemptSecondValidation(i, report)
 			if !secondValidationSucceeded {
 				fmt.Printf("Report %d is UNSAFE: %s\n", i, err.Error())
 				unsafe++
@@ -39,7 +39,7 @@ func main() {
 	fmt.Printf("There are %d safe reports and %d unsafe reports.", safe, unsafe)
 }
 
-func AttemptSecondValidation(report []int) bool {
+func AttemptSecondValidation(reportIdx int, report []int) bool {
 	// remove one level and re-attempt validation (do this for all levels, one at a time)
 	for i, lv := range report {
 		newReport := make([]int, len(report)-1)
@@ -47,7 +47,7 @@ func AttemptSecondValidation(report []int) bool {
 		copy(newReport[i:], report[i+1:])
 		err := ValidateReport(newReport)
 		if err == nil {
-			fmt.Printf("Report %d (%s) is SAFE after removing %d\n", i, reportToString(report), lv)
+			fmt.Printf("Report %d (%s) is SAFE after removing %d\n", reportIdx, reportToString(report), lv)
 			return true
 		}
 	}
